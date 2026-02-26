@@ -46,9 +46,16 @@ To enable the AI Agent, you must configure the Large Language Model (LLM) settin
 
 #### Test Connection
 After saving your settings, you can verify the connection:
+
+**LLM Connection Test**
 1. Navigate to `/admin/model-test`.
 2. Enter a test prompt (e.g., "Hello").
 3. Click **Test Connection** to ensure the agent can communicate with the LLM provider.
+
+**MCP Connection Test**
+1. Navigate to `/admin/mcp-test`.
+2. Click **Connect & List Tools** to verify that the Agent can communicate with your MCP servers.
+3. Select a tool (e.g., `query_database`) and provide arguments in JSON format to test actual interaction.
 
 ### MCP Server Management
 
