@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { logout } from '@/features/auth/server/actions'
 
 export default async function DashboardPage() {
@@ -20,6 +21,17 @@ export default async function DashboardPage() {
         <div className="p-4 border rounded-md bg-gray-50">
           <p className="text-lg font-medium">Welcome, {user.email}!</p>
           <p className="text-sm text-gray-500">User ID: {user.id}</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Link href="/dashboard/agent" className="p-4 border rounded-md hover:bg-gray-50 flex flex-col items-center justify-center text-center group">
+            <h2 className="text-xl font-bold text-blue-600 mb-2 group-hover:text-blue-800">Agent Chat</h2>
+            <p className="text-sm text-gray-600">Interact with the Enterprise AI Agent</p>
+          </Link>
+          <div className="p-4 border rounded-md bg-gray-50 opacity-50 flex flex-col items-center justify-center text-center">
+            <h2 className="text-xl font-bold text-gray-400 mb-2">CRM (Coming Soon)</h2>
+            <p className="text-sm text-gray-400">Manage clients and deals</p>
+          </div>
         </div>
 
         <form action={logout} className="flex justify-center">

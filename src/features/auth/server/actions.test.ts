@@ -51,6 +51,7 @@ describe('login server action', () => {
     
     await login({ email: 'test@example.com', password: 'password123' });
     
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { redirect } = require('next/navigation');
     expect(redirect).toHaveBeenCalledWith('/dashboard');
   });

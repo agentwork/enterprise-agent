@@ -1,9 +1,74 @@
 {
-  "id": "f973f7ca-214e-49e5-aad6-d0d495f658de",
+  "id": "36186a99-7bdf-4176-88c0-6c1908b9c874",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.checkpoint_writes": {
+      "name": "checkpoint_writes",
+      "schema": "",
+      "columns": {
+        "thread_id": {
+          "name": "thread_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "checkpoint_id": {
+          "name": "checkpoint_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "task_id": {
+          "name": "task_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "idx": {
+          "name": "idx",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "channel": {
+          "name": "channel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "checkpoint_writes_thread_id_checkpoint_id_task_id_idx_pk": {
+          "name": "checkpoint_writes_thread_id_checkpoint_id_task_id_idx_pk",
+          "columns": [
+            "thread_id",
+            "checkpoint_id",
+            "task_id",
+            "idx"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.checkpoints": {
       "name": "checkpoints",
       "schema": "",
@@ -11,8 +76,20 @@
         "thread_id": {
           "name": "thread_id",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
+        },
+        "checkpoint_id": {
+          "name": "checkpoint_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_checkpoint_id": {
+          "name": "parent_checkpoint_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "checkpoint": {
           "name": "checkpoint",
@@ -26,12 +103,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "parent_checkpoint_id": {
-          "name": "parent_checkpoint_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -42,7 +113,15 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "checkpoints_thread_id_checkpoint_id_pk": {
+          "name": "checkpoints_thread_id_checkpoint_id_pk",
+          "columns": [
+            "thread_id",
+            "checkpoint_id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},

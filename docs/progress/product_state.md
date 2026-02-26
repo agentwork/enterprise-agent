@@ -9,7 +9,7 @@
 | **Project Setup** | **Done** | AI | Next.js 16 + Supabase Local Init |
 | **Database Setup** | **Done** | AI | Drizzle + Migrations + pgvector |
 | **Auth System** | **Done** | AI/User | SSR Auth, Middleware RBAC, Login UI, Jest Tests |
-| **Agent Core** | **Pending** | - | LangGraph Runtime |
+| **Agent Core** | **In Progress** | AI/User | LangGraph Runtime, PostgresSaver, Chat UI |
 | **CRM Module** | **Pending** | - | Schema defined, logic pending |
 | **Knowledge Base** | **Pending** | - | Vector schema defined |
 

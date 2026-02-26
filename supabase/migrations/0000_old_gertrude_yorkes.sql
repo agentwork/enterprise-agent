@@ -1,10 +1,25 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('admin', 'manager', 'staff');--> statement-breakpoint
+CREATE TABLE "checkpoint_writes" (
+	"thread_id" text NOT NULL,
+	"checkpoint_id" text NOT NULL,
+	"task_id" text NOT NULL,
+	"idx" integer NOT NULL,
+	"channel" text NOT NULL,
+	"type" text,
+	"value" jsonb NOT NULL,
+	CONSTRAINT "checkpoint_writes_thread_id_checkpoint_id_task_id_idx_pk" PRIMARY KEY("thread_id","checkpoint_id","task_id","idx")
+);
+--> statement-breakpoint
 CREATE TABLE "checkpoints" (
-	"thread_id" text PRIMARY KEY NOT NULL,
+	"thread_id" text NOT NULL,
+	"checkpoint_id" text NOT NULL,
+	"parent_checkpoint_id" text,
 	"checkpoint" jsonb NOT NULL,
 	"metadata" jsonb NOT NULL,
-	"parent_checkpoint_id" text,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "checkpoints_thread_id_checkpoint_id_pk" PRIMARY KEY("thread_id","checkpoint_id")
 );
 --> statement-breakpoint
 CREATE TABLE "messages" (

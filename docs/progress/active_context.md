@@ -2,38 +2,29 @@
 
 ## Current Focus
 - **Goal**: Implement Agent Core Infrastructure.
-- **Status**: Phase 1 - Auth Completed & Merged. Starting Agent Core.
-- **Current Task**: Setting up LangGraph orchestrator and MCP client factory.
+- **Status**: Phase 2 - Agent Core Implementation.
+- **Current Task**: Completed initial Agent Core integration (LangGraph, Postgres Checkpointer, Server Actions, Chat UI).
 
 ## Recent Changes
-- **Auth Implementation**:
-    - Created feature branch `feature/auth-system`.
-    - Implemented Supabase Clients (`client.ts`, `server.ts`) in `src/lib/supabase`.
-    - Implemented Middleware (`middleware.ts`) for Session Management and RBAC (`/admin` protection).
-    - Created Auth Server Actions (`login`, `logout`) with Zod validation.
-    - Built Login UI (`LoginForm`) and Login Page (`/auth/login`).
-    - Added Unit Tests for Auth Actions using Jest.
-- **Database Setup**:
-    - Initialized Supabase project locally (`npx supabase init`).
-    - Configured Drizzle (`drizzle.config.ts`, `src/lib/db`).
-    - Implemented Drizzle Schemas: `auth`, `crm`, `knowledge`, `agent`.
-    - Enabled `pgvector` extension and applied migrations (`npx drizzle-kit migrate`).
-    - Fixed TypeScript module resolution for `src/lib/db/index.ts`.
-- **Project Initialization**:
-    - Initialized Next.js 16 (App Router, Tailwind, TypeScript, ESLint).
-    - Installed core dependencies: `supabase-js`, `drizzle-orm`, `langchain`, `zod`.
-    - Scaffolded Feature-Base directory structure (`src/features/*`, `src/shared/*`).
-- **Documentation Update**:
-    - Unified all documentation to English.
-    - Finalized `docs/feature-base.md` and `docs/schema/schema-index.md`.
-    - Enforced strict RBAC directory structure (`/admin` vs `/dashboard`).
+- **Agent Core Implementation**:
+    - Implemented `PostgresSaver` in `src/features/agent-core/server/checkpointer.ts` for persistent thread management.
+    - Setup LangGraph Orchestrator (`workflow`, `runner`) in `src/features/agent-core/graph`.
+    - Created `MCPClientFactory` in `src/features/agent-core/server/mcp-factory.ts` for dynamic tool loading.
+    - Implemented Server Action `invokeAgent` in `src/features/agent-core/server/actions.ts`.
+    - Built `Chat` component (`src/features/agent-core/ui/chat.tsx`) and Generative UI Registry (`registry.tsx`).
+    - Added Agent Chat Page (`/dashboard/agent`).
+- **Database Updates**:
+    - Updated Drizzle Schema for `checkpoints` and `checkpoint_writes` to support LangGraph persistence.
+    - Reset and re-migrated database to resolve schema conflicts.
 
-## Next Steps (Phase 1 Implementation)
-1.  **Auth Implementation**:
-    - Configure Supabase Auth.
-    - Implement Middleware for RBAC (`/admin` protection).
-2.  **Agent Core Setup**:
-    - Initialize LangGraph runtime in `src/features/agent-core`.
+## Next Steps (Phase 3 Implementation)
+1.  **MCP Integration**:
+    - Connect `MCPClientFactory` to actual MCP servers (e.g., Supabase MCP).
+    - Register MCP tools in the LangGraph workflow.
+2.  **Knowledge Base**:
+    - Implement RAG pipeline using `pgvector`.
+3.  **CRM Module**:
+    - Build CRM UI and actions.
 
 ## Open Questions
 - Need to confirm the specific Embedding Model (OpenAI `text-embedding-3-small` or local). defaulting to OpenAI dimensions (1536).

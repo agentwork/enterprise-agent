@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, jsonb, primaryKey, integer } from "drizzle-orm/pg-core";
 import { profiles } from "./auth";
 
 export const threads = pgTable("threads", {
@@ -11,11 +11,30 @@ export const threads = pgTable("threads", {
 
 // LangGraph Checkpoints (for persistence)
 export const checkpoints = pgTable("checkpoints", {
-  threadId: text("thread_id").primaryKey(), // Using text to match LangGraph ID format if needed
+  threadId: text("thread_id").notNull(),
+  checkpointId: text("checkpoint_id").notNull(),
+  parentCheckpointId: text("parent_checkpoint_id"),
   checkpoint: jsonb("checkpoint").notNull(), // Serialized graph state
   metadata: jsonb("metadata").notNull(),
-  parentCheckpointId: text("parent_checkpoint_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => {
+  return {
+    pk: primaryKey({ columns: [table.threadId, table.checkpointId] }),
+  };
+});
+
+export const checkpointWrites = pgTable("checkpoint_writes", {
+  threadId: text("thread_id").notNull(),
+  checkpointId: text("checkpoint_id").notNull(),
+  taskId: text("task_id").notNull(),
+  idx: integer("idx").notNull(),
+  channel: text("channel").notNull(),
+  type: text("type"),
+  value: jsonb("value").notNull(),
+}, (table) => {
+  return {
+    pk: primaryKey({ columns: [table.threadId, table.checkpointId, table.taskId, table.idx] }),
+  };
 });
 
 export const messages = pgTable("messages", {
