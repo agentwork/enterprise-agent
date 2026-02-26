@@ -1,37 +1,38 @@
 # Active Context
 
 ## Current Focus
-**Phase 3: Business Logic Implementation (CRM & Knowledge Base)**
+**Strengthening Agent Core & MCP Integration**
 
-We have completed the foundational architecture (Platform Core, Agent Core) and detailed feature specifications. Now we are moving into building the actual business logic, starting with the CRM module as the primary data source and the Knowledge Base for unstructured context.
+The user has requested to strengthen the Agent Core and MCP development. We have upgraded the LangGraph Orchestrator to a full ReAct-style agent that dynamically discovers and executes MCP tools, and added Admin capabilities for managing these configurations.
 
 ## Recent Achievements
-- **Feature Documentation**: Created detailed specifications for all 6 core modules, including Key Flows, User Scenarios, and Data Schemas.
-- **Agent Core**: Implemented LangGraph runtime with Postgres persistence and Generative UI registry.
-- **Auth System**: Fully functional RBAC with Supabase Auth.
+- **Admin Configuration**: Created `system_settings` and `mcp_servers` tables. Implemented Admin UI (`/admin/settings`) to manage LLM keys, models, and MCP servers.
+- **MCP Integration**: Enhanced `MCPClientFactory` to load server configurations from the database on initialization. Added UI for adding/removing MCP servers.
+- **Agent Core**: Updated `agentNode` to dynamically fetch LLM configuration (Provider, Model, API Key) from the database. Added support for **Anthropic (Claude)** models alongside OpenAI.
+- **Generative UI**: Created `DataChart` (using Recharts) and `DocumentPreview` components. Registered them in the UI registry to render structured tool outputs.
+- **Documentation**: Created `docs/admin-guideline.md` covering Admin operations, local Supabase MCP setup, and model key application.
 
 ## Next Steps (Execution Plan)
 
-### 1. CRM Module (Priority 1)
-- **Schema Implementation**:
-    - Create `src/features/crm/schema.ts` defining `clients`, `contacts`, `deals`, `activities`.
-    - Run `drizzle-kit push` to apply changes.
-- **MCP Tools**:
-    - Develop `src/features/crm/tools/` with `create_client`, `search_clients`, `log_activity`.
-    - Implement Zod schemas for strict validation.
-- **UI Components**:
-    - Build `src/features/crm/components/ClientCard.tsx` and `ActivityFeed.tsx`.
-    - Register components in `src/features/agent-core/ui/registry.tsx`.
+### 1. Integration Testing
+- **Goal**: Verify the end-to-end flow with a real MCP server.
+- **Tasks**:
+    - Spin up a Supabase MCP server locally.
+    - Add it via the Admin UI.
+    - Chat with the agent to query data and verify `DataChart` rendering.
 
-### 2. Knowledge Base (Priority 2)
-- **Schema Implementation**:
-    - Create `src/features/knowledge/schema.ts` defining `documents` and `document_chunks` (with vector support).
-- **Ingestion Pipeline**:
-    - Implement file upload server action.
-    - Create background job for parsing and embedding (using OpenAI `text-embedding-3-small`).
-- **RAG Tool**:
-    - Implement `search_knowledge_base` tool for semantic retrieval.
+### 2. Knowledge Base Implementation
+- **Goal**: Implement the RAG pipeline.
+- **Tasks**:
+    - Create `knowledge` feature module.
+    - Implement document ingestion (PDF/Text) to `pgvector`.
+    - Create an MCP server (or tool) for semantic search.
+
+### 3. CRM Module
+- **Goal**: Build the CRM features.
+- **Tasks**:
+    - Implement Client/Deal management UI.
+    - Create MCP tools for CRM operations (Add Client, Update Deal).
 
 ## Active Questions
-- **Embedding Model**: Confirming usage of `text-embedding-3-small` (1536 dimensions).
-- **Vector Index**: Need to ensure `ivfflat` or `hnsw` index is created for performance.
+- **Deployment**: How to handle MCP server processes in a production deployment (e.g., Vercel)? Currently using `StdioClientTransport` which spawns subprocesses. This works locally or on a VPS/Container, but not on Vercel Edge/Serverless easily. Might need SSE transport for remote MCP servers.

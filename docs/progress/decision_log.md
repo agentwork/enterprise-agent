@@ -27,3 +27,18 @@
   - **Server Actions**: Encapsulated Login/Logout logic in Server Actions (`src/features/auth/server/actions.ts`) for type safety and progressive enhancement.
   - **Validation**: Using `zod` for strict runtime validation of auth inputs.
   - **Testing**: Added Jest unit tests for Server Actions to ensure logic correctness before UI integration.
+
+## 2026-02-26: Agent Core & MCP Integration (Phase 2)
+
+- **Agent Orchestrator**:
+  - **ReAct Pattern**: Upgraded LangGraph Orchestrator from a placeholder echo bot to a full ReAct-style agent.
+  - **Dynamic Tool Binding**: Agent dynamically discovers and binds MCP tools at runtime, ensuring it always has access to the latest capabilities from connected servers.
+  - **State Persistence**: Leveraging `PostgresSaver` for robust session management and context retention across interactions.
+
+- **MCP Architecture**:
+  - **Client Factory**: Enhanced `MCPClientFactory` to serve as a central hub for tool discovery, caching, and execution routing.
+  - **Tool Execution**: Implemented robust error handling and result serialization for tool outputs.
+  - **UI Integration**: Updated `ToolOutput` component to handle JSON-structured tool results, enabling rich generative UI rendering.
+
+- **Testing Strategy**:
+  - **Unit Tests**: Added comprehensive tests for graph structure and tool execution logic to ensure stability before integration with external services.
