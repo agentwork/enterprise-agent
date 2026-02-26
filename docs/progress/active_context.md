@@ -1,34 +1,37 @@
 # Active Context
 
 ## Current Focus
-- **Goal**: Implement Agent Core Infrastructure.
-- **Status**: Phase 2 - Agent Core Implementation (Stabilized).
-- **Current Task**: Completed Agent Core infrastructure with persistent thread management, Generative UI, and bug fixes for reliability.
+**Phase 3: Business Logic Implementation (CRM & Knowledge Base)**
 
-## Recent Changes
-- **Agent Core Stabilization**:
-    - Fixed `PostgresSaver` in `src/features/agent-core/server/checkpointer.ts` to handle `undefined` values in `checkpoint_writes` by converting to `null`.
-    - Updated `invokeAgent` server action in `src/features/agent-core/server/actions.ts` to safely handle serialized LangChain messages (fixed `_getType` error).
-    - Resolved database schema desync by running `drizzle-kit push` after manual resets.
-- **Agent Core Implementation**:
-    - Implemented `PostgresSaver` for persistent thread management.
-    - Setup LangGraph Orchestrator (`workflow`, `runner`) in `src/features/agent-core/graph`.
-    - Created `MCPClientFactory` for dynamic tool loading.
-    - Built `Chat` component (`src/features/agent-core/ui/chat.tsx`) and Generative UI Registry (`registry.tsx`).
-    - Added Agent Chat Page (`/dashboard/agent`).
-- **Code Quality**:
-    - Fixed all ESLint warnings and errors across the codebase (unused variables, component-in-render issues).
-- **Database Updates**:
-    - Updated Drizzle Schema for `checkpoints` and `checkpoint_writes` (nullable values for stability).
+We have completed the foundational architecture (Platform Core, Agent Core) and detailed feature specifications. Now we are moving into building the actual business logic, starting with the CRM module as the primary data source and the Knowledge Base for unstructured context.
 
-## Next Steps (Phase 3 Implementation)
-1.  **MCP Integration**:
-    - Connect `MCPClientFactory` to actual MCP servers (e.g., Supabase MCP).
-    - Register MCP tools in the LangGraph workflow.
-2.  **Knowledge Base**:
-    - Implement RAG pipeline using `pgvector`.
-3.  **CRM Module**:
-    - Build CRM UI and actions.
+## Recent Achievements
+- **Feature Documentation**: Created detailed specifications for all 6 core modules, including Key Flows, User Scenarios, and Data Schemas.
+- **Agent Core**: Implemented LangGraph runtime with Postgres persistence and Generative UI registry.
+- **Auth System**: Fully functional RBAC with Supabase Auth.
 
-## Open Questions
-- Need to confirm the specific Embedding Model (OpenAI `text-embedding-3-small` or local). defaulting to OpenAI dimensions (1536).
+## Next Steps (Execution Plan)
+
+### 1. CRM Module (Priority 1)
+- **Schema Implementation**:
+    - Create `src/features/crm/schema.ts` defining `clients`, `contacts`, `deals`, `activities`.
+    - Run `drizzle-kit push` to apply changes.
+- **MCP Tools**:
+    - Develop `src/features/crm/tools/` with `create_client`, `search_clients`, `log_activity`.
+    - Implement Zod schemas for strict validation.
+- **UI Components**:
+    - Build `src/features/crm/components/ClientCard.tsx` and `ActivityFeed.tsx`.
+    - Register components in `src/features/agent-core/ui/registry.tsx`.
+
+### 2. Knowledge Base (Priority 2)
+- **Schema Implementation**:
+    - Create `src/features/knowledge/schema.ts` defining `documents` and `document_chunks` (with vector support).
+- **Ingestion Pipeline**:
+    - Implement file upload server action.
+    - Create background job for parsing and embedding (using OpenAI `text-embedding-3-small`).
+- **RAG Tool**:
+    - Implement `search_knowledge_base` tool for semantic retrieval.
+
+## Active Questions
+- **Embedding Model**: Confirming usage of `text-embedding-3-small` (1536 dimensions).
+- **Vector Index**: Need to ensure `ivfflat` or `hnsw` index is created for performance.
