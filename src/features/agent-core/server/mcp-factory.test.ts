@@ -26,7 +26,7 @@ describe("MCPClientFactory", () => {
     // we rely on state reset or just test behavior.
     // However, since it's a singleton, state persists across tests if not careful.
     // We can't easily reset private static property without ts-ignore.
-    // @ts-ignore
+    // @ts-expect-error - Reset private static for tests
     MCPClientFactory.instance = undefined;
 
     mockConnect = jest.fn().mockResolvedValue(undefined);

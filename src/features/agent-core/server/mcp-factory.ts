@@ -66,10 +66,14 @@ export class MCPClientFactory {
       return this.clients.get(name)!;
     }
 
+    const cleanEnv = Object.fromEntries(
+      Object.entries({ ...process.env, ...env }).filter(([, v]) => v !== undefined)
+    ) as Record<string, string>;
+
     const transport = new StdioClientTransport({
       command,
       args,
-      env: { ...process.env, ...env },
+      env: cleanEnv,
     });
 
     const client = new Client(

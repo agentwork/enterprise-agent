@@ -33,9 +33,9 @@ The Admin Panel is the central control hub for the Enterprise Agent. It is acces
 
 ## System Configuration
 
-### LLM Settings
+### LLM Settings & Connection Test
 
-To enable the AI Agent, you must configure the Large Language Model (LLM) settings.
+To enable the AI Agent, you must configure the Large Language Model (LLM) settings and verify the connection.
 
 1. Navigate to `/admin/settings`.
 2. Locate the **LLM Configuration** section.
@@ -43,6 +43,12 @@ To enable the AI Agent, you must configure the Large Language Model (LLM) settin
 4. **Model Name**: Enter the model ID (e.g., `gpt-4o`, `claude-3-5-sonnet-20240620`).
 5. **API Key**: Enter your secret API key.
 6. Click **Save Settings**.
+
+#### Test Connection
+After saving your settings, you can verify the connection:
+1. Navigate to `/admin/model-test`.
+2. Enter a test prompt (e.g., "Hello").
+3. Click **Test Connection** to ensure the agent can communicate with the LLM provider.
 
 ### MCP Server Management
 
@@ -68,26 +74,12 @@ The Model Context Protocol (MCP) allows the agent to connect to external tools a
 
 ## Local Supabase MCP Setup
 
+For detailed instructions on setting up Supabase locally with Docker, please refer to [docs/supabase-local.md](../supabase-local.md).
+
 To test the agent with real database data, you can set up a local Supabase MCP server. This allows the agent to query your local Supabase instance using natural language.
 
-### Prerequisites
-- [Supabase CLI](https://supabase.com/docs/guides/cli) installed (`brew install supabase/tap/supabase`).
-- Docker running.
-- Node.js installed.
-
-### Step-by-Step Guide
-
-#### 1. Start Local Supabase
-If you haven't already started the local Supabase instance for this project:
-
-```bash
-npx supabase start
-```
-
-This will output the API URL and Service Role Key. Keep these handy.
-
-#### 2. Verify Database Schema
-Ensure your local database has the required tables. You can push the schema using Drizzle:
+### Quick Start
+If you have already followed the [Local Supabase Guide](../supabase-local.md):
 
 ```bash
 npm run db:push

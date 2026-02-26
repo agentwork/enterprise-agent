@@ -6,7 +6,7 @@ interface DocumentPreviewProps {
   documents: Array<{
     title?: string;
     content: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     url?: string;
   }>;
 }
@@ -24,7 +24,7 @@ export function DocumentPreview({ documents }: DocumentPreviewProps) {
             <div className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-blue-500" />
               <h4 className="font-medium text-sm text-gray-800">
-                {doc.title || doc.metadata?.title || `Document ${idx + 1}`}
+                {doc.title || (doc.metadata?.title as string) || `Document ${idx + 1}`}
               </h4>
             </div>
             {doc.url && (

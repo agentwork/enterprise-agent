@@ -4,19 +4,17 @@ import React from "react";
 import { DataChart } from "./generative/data-chart";
 import { DocumentPreview } from "./generative/document-preview";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ToolComponentProps<T = any> = {
+export type ToolComponentProps<T = unknown> = {
   data: T;
   toolCallId?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ToolComponent<T = any> = React.ComponentType<ToolComponentProps<T>>;
+export type ToolComponent<T = unknown> = React.ComponentType<ToolComponentProps<T>>;
 
 const registry: Record<string, ToolComponent> = {
   // Register default handlers for common tool types
-  "sql_db_query": (props) => <DataChart data={Array.isArray(props.data) ? props.data : (props.data as any)?.rows || []} />,
-  "vector_search": (props) => <DocumentPreview documents={Array.isArray(props.data) ? props.data : (props.data as any)?.documents || []} />,
+  "sql_db_query": (props) => <DataChart data={Array.isArray(props.data) ? props.data : (props.data as { rows: unknown[] })?.rows || []} />,
+  "vector_search": (props) => <DocumentPreview documents={Array.isArray(props.data) ? props.data : (props.data as { documents: unknown[] })?.documents || []} />,
   // Add more mappings as needed based on actual tool names
 };
 
@@ -34,8 +32,7 @@ export function ToolOutput({
   toolCallId,
 }: {
   toolName: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
+  data: unknown;
   toolCallId?: string;
 }) {
   const Component = getToolComponent(toolName);

@@ -1,6 +1,5 @@
 import { graph } from "./index";
 import { MCPClientFactory } from "../server/mcp-factory";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
 
 // Mock MCPClientFactory
 jest.mock("../server/mcp-factory");

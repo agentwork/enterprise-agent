@@ -8,13 +8,6 @@ import { z } from "zod";
 
 // --- System Settings ---
 
-const SystemSettingSchema = z.object({
-  key: z.string(),
-  value: z.any(),
-  description: z.string().optional(),
-  isEncrypted: z.boolean().optional(),
-});
-
 export async function getSystemSetting(key: string) {
   try {
     const result = await db
@@ -30,7 +23,7 @@ export async function getSystemSetting(key: string) {
   }
 }
 
-export async function setSystemSetting(key: string, value: any, description?: string, isEncrypted = false) {
+export async function setSystemSetting(key: string, value: unknown, description?: string, isEncrypted = false) {
   try {
     const existing = await db
       .select()
@@ -72,7 +65,7 @@ const MCPServerSchema = z.object({
   name: z.string().min(1),
   command: z.string().min(1),
   args: z.array(z.string()),
-  env: z.record(z.string()),
+  env: z.record(z.string(), z.string()),
   isEnabled: z.boolean(),
 });
 
@@ -105,8 +98,7 @@ export async function addMCPServer(data: z.infer<typeof MCPServerSchema>) {
 
 export async function updateMCPServer(id: string, data: Partial<z.infer<typeof MCPServerSchema>>) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateData: any = { ...data, updatedAt: new Date() };
+    const updateData = { ...data, updatedAt: new Date() };
     
     await db
       .update(mcpServers)

@@ -28,6 +28,18 @@
   - **Validation**: Using `zod` for strict runtime validation of auth inputs.
   - **Testing**: Added Jest unit tests for Server Actions to ensure logic correctness before UI integration.
 
+## 2026-02-26: Code Quality & Maintenance
+
+- **Centralized Model Factory**: 
+    - Moved dynamic model initialization from `src/features/agent-core/graph/index.ts` to a dedicated `src/features/agent-core/server/model-factory.ts`.
+    - This allows both the Agent runtime and Admin testing tools to share the same configuration logic.
+- **Strict Linting & Build Standards**: 
+    - Cleaned up all remaining `any` types and unused variables to pass strict ESLint rules.
+    - Fixed TypeScript environment variable mapping issues in `MCPClientFactory`.
+    - Enforced a "zero-lint-warning" policy for core features.
+- **Verification Infrastructure**: 
+    - Introduced a dedicated `/admin/model-test` page for administrators to verify LLM connection status independently of the main chat interface.
+
 ## 2026-02-26: Agent Core & MCP Integration (Phase 2)
 
 - **Agent Orchestrator**:

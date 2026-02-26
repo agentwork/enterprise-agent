@@ -1,43 +1,10 @@
 import { StateGraph } from "@langchain/langgraph";
 import { BaseMessage, AIMessage } from "@langchain/core/messages";
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatAnthropic } from "@langchain/anthropic";
 import { AgentState } from "./state";
-import { getSystemSetting } from "@/features/admin/server/actions";
+import { getModel } from "../server/model-factory";
 
 // Tools
 import { getMCPToolsForModel, executeTools } from "./tools";
-
-// Initialize model dynamically
-const getModel = async () => {
-  const providerSetting = await getSystemSetting("llm_provider");
-  const modelNameSetting = await getSystemSetting("llm_model_name");
-  const apiKeySetting = await getSystemSetting("llm_api_key");
-  
-  const provider = (providerSetting?.value as string) || "openai";
-  const modelName = (modelNameSetting?.value as string) || "gpt-4o";
-  const apiKey = (apiKeySetting?.value as string);
-
-  if (provider === "anthropic") {
-    return {
-      model: new ChatAnthropic({
-        modelName: modelName,
-        apiKey: apiKey, // If undefined, it falls back to process.env.ANTHROPIC_API_KEY
-        temperature: 0,
-      }),
-      provider: "anthropic" as const
-    };
-  }
-
-  return {
-    model: new ChatOpenAI({
-      modelName: modelName,
-      apiKey: apiKey, // If undefined, it falls back to process.env.OPENAI_API_KEY
-      temperature: 0,
-    }),
-    provider: "openai" as const
-  };
-};
 
 // 1. Define nodes
 
@@ -52,8 +19,8 @@ const agentNode = async (state: AgentState): Promise<Partial<AgentState>> => {
   const tools = await getMCPToolsForModel(provider);
   
   // Bind tools to the model
-  // We use bind({ tools: ... }) directly because we have the raw tool definitions
-  // derived from MCP schemas.
+  // We use bindTools if available, or bind({ tools: ... })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const modelWithTools = (model as any).bind({
     tools: tools,
   });

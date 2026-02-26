@@ -3,7 +3,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface DataChartProps {
-  data: Record<string, any>[];
+  data: Record<string, unknown>[];
   title?: string;
   xAxisKey?: string;
   barKey?: string;

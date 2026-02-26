@@ -34,7 +34,7 @@ export function MCPServerList({ servers }: MCPServerListProps) {
       try {
         parsedArgs = JSON.parse(formData.args);
         if (!Array.isArray(parsedArgs)) throw new Error("Args must be an array");
-      } catch (e) {
+      } catch {
         alert("Invalid JSON for args");
         return;
       }
@@ -42,7 +42,7 @@ export function MCPServerList({ servers }: MCPServerListProps) {
       try {
         parsedEnv = JSON.parse(formData.env);
         if (typeof parsedEnv !== "object" || Array.isArray(parsedEnv)) throw new Error("Env must be an object");
-      } catch (e) {
+      } catch {
         alert("Invalid JSON for env");
         return;
       }
