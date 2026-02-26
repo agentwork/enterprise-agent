@@ -9,9 +9,9 @@
 | **Project Setup** | **Done** | AI | Next.js 16 + Supabase Local Init |
 | **Database Setup** | **Done** | AI | Drizzle + Migrations + pgvector |
 | **Auth System** | **Done** | AI/User | SSR Auth, Middleware RBAC, Login UI, Jest Tests |
-| **Agent Core** | **In Progress** | AI/User | LangGraph Runtime, PostgresSaver, Chat UI |
+| **Agent Core** | **Done** | AI/User | LangGraph Runtime, PostgresSaver, Generative UI, Chat UI |
 | **CRM Module** | **Pending** | - | Schema defined, logic pending |
 | **Knowledge Base** | **Pending** | - | Vector schema defined |
 
 ## Known Issues
-- None (Greenfield project)
+- None (All core runtime bugs resolved)

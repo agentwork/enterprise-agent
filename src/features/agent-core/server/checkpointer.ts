@@ -196,12 +196,12 @@ export class PostgresSaver extends BaseCheckpointSaver {
                 idx: i,
                 channel,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value: value as any,
+                value: (value === undefined ? null : value) as any,
             }).onConflictDoUpdate({
                 target: [checkpointWrites.threadId, checkpointWrites.checkpointId, checkpointWrites.taskId, checkpointWrites.idx],
                 set: {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    value: value as any,
+                    value: (value === undefined ? null : value) as any,
                     channel
                 }
             });

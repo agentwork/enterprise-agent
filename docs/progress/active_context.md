@@ -2,20 +2,24 @@
 
 ## Current Focus
 - **Goal**: Implement Agent Core Infrastructure.
-- **Status**: Phase 2 - Agent Core Implementation.
-- **Current Task**: Completed initial Agent Core integration (LangGraph, Postgres Checkpointer, Server Actions, Chat UI).
+- **Status**: Phase 2 - Agent Core Implementation (Stabilized).
+- **Current Task**: Completed Agent Core infrastructure with persistent thread management, Generative UI, and bug fixes for reliability.
 
 ## Recent Changes
+- **Agent Core Stabilization**:
+    - Fixed `PostgresSaver` in `src/features/agent-core/server/checkpointer.ts` to handle `undefined` values in `checkpoint_writes` by converting to `null`.
+    - Updated `invokeAgent` server action in `src/features/agent-core/server/actions.ts` to safely handle serialized LangChain messages (fixed `_getType` error).
+    - Resolved database schema desync by running `drizzle-kit push` after manual resets.
 - **Agent Core Implementation**:
-    - Implemented `PostgresSaver` in `src/features/agent-core/server/checkpointer.ts` for persistent thread management.
+    - Implemented `PostgresSaver` for persistent thread management.
     - Setup LangGraph Orchestrator (`workflow`, `runner`) in `src/features/agent-core/graph`.
-    - Created `MCPClientFactory` in `src/features/agent-core/server/mcp-factory.ts` for dynamic tool loading.
-    - Implemented Server Action `invokeAgent` in `src/features/agent-core/server/actions.ts`.
+    - Created `MCPClientFactory` for dynamic tool loading.
     - Built `Chat` component (`src/features/agent-core/ui/chat.tsx`) and Generative UI Registry (`registry.tsx`).
     - Added Agent Chat Page (`/dashboard/agent`).
+- **Code Quality**:
+    - Fixed all ESLint warnings and errors across the codebase (unused variables, component-in-render issues).
 - **Database Updates**:
-    - Updated Drizzle Schema for `checkpoints` and `checkpoint_writes` to support LangGraph persistence.
-    - Reset and re-migrated database to resolve schema conflicts.
+    - Updated Drizzle Schema for `checkpoints` and `checkpoint_writes` (nullable values for stability).
 
 ## Next Steps (Phase 3 Implementation)
 1.  **MCP Integration**:

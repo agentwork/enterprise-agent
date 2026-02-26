@@ -30,7 +30,7 @@ export const checkpointWrites = pgTable("checkpoint_writes", {
   idx: integer("idx").notNull(),
   channel: text("channel").notNull(),
   type: text("type"),
-  value: jsonb("value").notNull(),
+  value: jsonb("value"),
 }, (table) => {
   return {
     pk: primaryKey({ columns: [table.threadId, table.checkpointId, table.taskId, table.idx] }),
