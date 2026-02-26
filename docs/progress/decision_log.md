@@ -63,11 +63,17 @@
     - Implemented a robust seed script at `src/lib/db/seed-crm.ts` that populates the database with sample CRM data (clients, deals, and activities) to accelerate development and testing.
     - Integrated the seed command as `npm run db:seed` in `package.json` using `tsx` for TypeScript execution.
 
-## 2026-02-26: Agent Runtime Bug Fixes
+## 2026-02-26: Knowledge Base & RAG Implementation (Phase 3)
 
-- **Tool Binding Compatibility**:
-    - Fixed a `TypeError: model.bind is not a function` by updating the agent's tool binding logic in `src/features/agent-core/graph/index.ts` to support both modern `bindTools` and legacy `bind` methods.
-- **OpenAI API Compliance**:
-    - Resolved a `400 Missing required parameter: 'tools[0].type'` error by correctly formatting tool definitions in `src/features/agent-core/graph/tools.ts` to include the mandatory `"type": "function"` structure required by the OpenAI API.
-- **Linter Cleanup**:
-    - Resolved all remaining ESLint errors, including an "impure function" error in the CRM dashboard related to `Date.now()`.
+- **Vector Search Engine**:
+  - **pgvector Integration**: Successfully utilized `pgvector` within Supabase to store and query high-dimensional embeddings.
+  - **OpenAI Embeddings**: Integrated `text-embedding-3-small` for generating high-quality vector representations of documents and queries.
+  - **Hybrid Configuration**: Implemented a fallback mechanism for API keys that checks both encrypted database settings and local environment variables.
+
+- **RAG Pipeline**:
+  - **Chunking Strategy**: Employed `RecursiveCharacterTextSplitter` from LangChain to handle long documents efficiently while maintaining context across segments.
+  - **Dynamic Ingestion**: Developed server actions that handle document upload, chunking, and embedding generation in a single atomic flow.
+
+- **Agent Tooling**:
+  - **Search & Ingest**: Created `knowledge_search` and `knowledge_add_document` tools, enabling the agent to both retrieve information and save new knowledge autonomously.
+  - **Generative UI Registry**: Mapped knowledge tool outputs to `DocumentPreview` for rich, interactive document results in the chat interface.

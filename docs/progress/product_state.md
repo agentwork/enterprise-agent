@@ -12,7 +12,7 @@
 | **Agent Core** | **Done (Admin + UI)** | AI/User | LangGraph ReAct Agent, Dynamic MCP Tools, Postgres Persistence, Generative UI (Recharts), Admin Settings, Model Test Page |
 | **Feature Documentation** | **Done** | AI/User | Detailed specs for all modules in `docs/features/` + `docs/admin-guideline.md` + `docs/supabase-local.md` |
 | **CRM Module** | **Done (Core + Agent)** | AI | Clients, Deals, Activities CRUD & UI Implemented. Server Actions Tested. Agent Tools Integrated. |
-| **Knowledge Base** | **In Progress** | AI | Vector schema defined. Server Actions & UI implemented. Agent Tools registered. |
+| **Knowledge Base** | **Done (Core + Agent)** | AI | RAG pipeline with pgvector. Document management UI. Agent tools for search & ingestion. |
 | **Analytics Module** | **Planned** | - | Specs defined |
 | **Proposal Generator** | **Planned** | - | Specs defined |
 
