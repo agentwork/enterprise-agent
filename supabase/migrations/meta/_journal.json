@@ -15,6 +15,13 @@
       "when": 1772084917035,
       "tag": "0001_add_crm_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772095267849,
+      "tag": "0002_proposals_init",
+      "breakpoints": true
     }
   ]
 }

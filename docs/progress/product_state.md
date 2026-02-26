@@ -15,7 +15,7 @@
 | **Knowledge Base** | **Done (Core + Agent)** | AI | RAG pipeline with pgvector. Document management UI. Agent tools for search & ingestion. |
 | **Analytics Module** | **Done** | AI | Implemented Server Actions for aggregation & Recharts UI. |
 | **Generative UI** | **Done** | AI | Auto-detection of data charts in chat and tool outputs. Supports currency parsing. |
-| **Proposal Generator** | **In Progress** | - | Specs defined |
+| **Proposal Generator** | **Done** | AI | Implemented Template, Editor, AI Content Gen, Preview, and Table support. |
 
 ## Known Issues
 - None (All core runtime bugs resolved)

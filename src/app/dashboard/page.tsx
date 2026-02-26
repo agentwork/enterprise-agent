@@ -81,6 +81,18 @@ export default async function DashboardPage() {
             <p className="text-sm text-gray-500">View insights on sales performance, deal stages, and trends.</p>
           </Link>
 
+          {/* Proposals */}
+          <Link 
+            href="/dashboard/proposals" 
+            className="flex flex-col p-6 bg-white border rounded-xl shadow-sm hover:shadow-md transition-all hover:border-pink-200 group"
+          >
+            <div className="h-12 w-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4 text-2xl group-hover:bg-pink-200 transition-colors">
+              📄
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-pink-600 transition-colors">Proposals</h2>
+            <p className="text-sm text-gray-500">Generate, edit, and track client proposals and contracts.</p>
+          </Link>
+
           {/* Settings (Admin) */}
           <Link 
             href="/admin/settings" 
