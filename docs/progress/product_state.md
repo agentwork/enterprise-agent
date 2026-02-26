@@ -6,8 +6,9 @@
 | :--- | :--- | :--- | :--- |
 | **Platform Architecture** | **Done** | AI/User | Defined in `docs/enterprise-agent.md` & `feature-base.md` |
 | **Schema Design** | **Done** | AI | Defined in `docs/schema/schema-index.md` |
-| **Project Setup** | **Pending** | - | Next.js + Supabase init |
-| **Auth System** | **Pending** | - | RBAC Implementation |
+| **Project Setup** | **Done** | AI | Next.js 16 + Supabase Local Init |
+| **Database Setup** | **Done** | AI | Drizzle + Migrations + pgvector |
+| **Auth System** | **Pending** | - | RBAC Implementation (Next Step) |
 | **Agent Core** | **Pending** | - | LangGraph Runtime |
 | **CRM Module** | **Pending** | - | Schema defined, logic pending |
 | **Knowledge Base** | **Pending** | - | Vector schema defined |
