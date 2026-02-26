@@ -1,6 +1,7 @@
 import { MCPClientFactory } from "../server/mcp-factory";
 import { ToolMessage } from "@langchain/core/messages";
 import { AIMessage } from "@langchain/core/messages";
+import { crmTools } from "../../crm/server/tools";
 
 /**
  * Fetches tools from MCP and converts them to the specified provider's format.
@@ -8,11 +9,18 @@ import { AIMessage } from "@langchain/core/messages";
 export async function getMCPToolsForModel(provider: "openai" | "anthropic" = "openai") {
   const mcp = MCPClientFactory.getInstance();
   // Ensure we have the latest tools
-  const tools = await mcp.listTools();
+  const mcpTools = await mcp.listTools();
+  
+  // Combine MCP tools with local CRM tools
+  // We map crmTools to match the Tool type interface if needed, but for now they are compatible enough
+  const allTools = [
+    ...mcpTools,
+    ...crmTools
+  ];
   
   if (provider === "anthropic") {
     // Convert to Anthropic tool format
-    return tools.map((tool) => ({
+    return allTools.map((tool) => ({
       name: tool.name,
       description: tool.description,
       input_schema: tool.inputSchema,
@@ -20,7 +28,7 @@ export async function getMCPToolsForModel(provider: "openai" | "anthropic" = "op
   }
 
   // Default: Convert to OpenAI tool format
-  return tools.map((tool) => ({
+  return allTools.map((tool) => ({
     type: "function" as const,
     function: {
       name: tool.name,
@@ -44,8 +52,19 @@ export async function executeTools(lastMessage: AIMessage) {
 
   for (const call of toolCalls) {
     try {
-      // call.args is typically an object if parsed correctly by LangChain
-      const result = await mcp.callTool(call.name, call.args as Record<string, unknown>);
+      // Check if it's a local CRM tool
+      const localTool = crmTools.find(t => t.name === call.name);
+      
+      let result;
+      if (localTool) {
+        // Execute local tool handler
+        console.log(`[Agent] Executing local tool: ${call.name}`);
+        result = await localTool.handler(call.args);
+      } else {
+        // Execute via MCP
+        // call.args is typically an object if parsed correctly by LangChain
+        result = await mcp.callTool(call.name, call.args as Record<string, unknown>);
+      }
       
       // MCP returns { content: ... } or similar. 
       // We stringify the result to pass it back to the model.

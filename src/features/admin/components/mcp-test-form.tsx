@@ -38,7 +38,7 @@ export function MCPTestForm() {
       let parsedArgs = {};
       try {
         parsedArgs = JSON.parse(args);
-      } catch (e) {
+      } catch {
         setError("Invalid JSON arguments");
         setIsLoading(false);
         return;
@@ -50,9 +50,8 @@ export function MCPTestForm() {
       } else {
         setError(res.error || "Failed to call tool");
       }
-    } catch (err) {
-      setError("An unexpected error occurred.");
-      console.error(err);
+    } catch {
+      setError("Failed to execute query");
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +113,7 @@ export function MCPTestForm() {
         </div>
       )}
 
-      {result && (
+      {!!result && (
         <div className="space-y-2">
           <label className="text-sm font-semibold">Result</label>
           <pre className="p-4 bg-muted rounded-md overflow-auto text-xs max-h-[400px]">
