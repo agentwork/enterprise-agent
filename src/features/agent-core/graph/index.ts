@@ -19,11 +19,24 @@ const agentNode = async (state: AgentState): Promise<Partial<AgentState>> => {
   const tools = await getMCPToolsForModel(provider);
   
   // Bind tools to the model
-  // We use bindTools if available, or bind({ tools: ... })
+  let modelWithTools;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const modelWithTools = (model as any).bind({
-    tools: tools,
-  });
+  if (typeof (model as any).bindTools === "function") {
+    // bindTools is the modern way to bind tools in LangChain
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    modelWithTools = (model as any).bindTools(tools);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } else if (typeof (model as any).bind === "function") {
+    // Fallback to bind({ tools: ... })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    modelWithTools = (model as any).bind({
+      tools: tools,
+    });
+  } else {
+    // If both are missing, something is wrong with the model instance
+    console.error("Model instance is missing bind and bindTools methods:", model);
+    throw new Error("Model instance is not a valid LangChain ChatModel (missing bind/bindTools).");
+  }
   
   // Invoke the model
   const response = await modelWithTools.invoke(messages);

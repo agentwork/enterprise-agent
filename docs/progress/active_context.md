@@ -10,10 +10,14 @@ We have completed the development of the CRM (Customer Relationship Management) 
     - **Schema**: Defined `clients`, `contacts`, `deals`, and `activities` tables.
     - **Server Actions**: Implemented actions for data manipulation.
     - **UI Components**: Created forms and lists for Clients and Deals, and an Activity Feed.
-    - **Pages**: Completed `/dashboard/crm` pages for listing and details.
+    - **Dashboard**: Created `/dashboard/crm` as a central overview for CRM activities.
+    - **Seed Data**: Developed a comprehensive seed script (`npm run db:seed`) to populate the CRM with sample clients, deals, and activities.
     - **Testing**: Comprehensive unit tests for all CRM server actions (Clients, Deals, Activities).
     - **MCP Integration**: Created `crmTools` and integrated them into the Agent Core (`getMCPToolsForModel`), enabling the AI agent to perform CRM actions directly.
-- **Code Quality**: Resolved all lint errors and type issues in the CRM module.
+- **Agent Core Stability**: 
+    - **Bug Fix**: Resolved `model.bind is not a function` error by implementing robust tool binding logic that supports both modern `bindTools` and legacy `bind` methods.
+    - **Bug Fix**: Fixed OpenAI 400 error (`missing_required_parameter: 'tools[0].type'`) by ensuring tools are correctly formatted for the OpenAI API.
+- **Code Quality**: Resolved all lint errors and type issues across the CRM and Agent Core modules.
 
 ## Next Steps (Execution Plan)
 

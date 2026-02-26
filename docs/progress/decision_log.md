@@ -54,3 +54,20 @@
 
 - **Testing Strategy**:
   - **Unit Tests**: Added comprehensive tests for graph structure and tool execution logic to ensure stability before integration with external services.
+
+## 2026-02-26: CRM Seeding & Dashboard Enhancement
+
+- **Dashboard Page Implementation**:
+    - Created a unified `/dashboard/crm` page to provide a bird's-eye view of CRM activities, including recent clients and active deals.
+- **CRM Seeding Script**:
+    - Implemented a robust seed script at `src/lib/db/seed-crm.ts` that populates the database with sample CRM data (clients, deals, and activities) to accelerate development and testing.
+    - Integrated the seed command as `npm run db:seed` in `package.json` using `tsx` for TypeScript execution.
+
+## 2026-02-26: Agent Runtime Bug Fixes
+
+- **Tool Binding Compatibility**:
+    - Fixed a `TypeError: model.bind is not a function` by updating the agent's tool binding logic in `src/features/agent-core/graph/index.ts` to support both modern `bindTools` and legacy `bind` methods.
+- **OpenAI API Compliance**:
+    - Resolved a `400 Missing required parameter: 'tools[0].type'` error by correctly formatting tool definitions in `src/features/agent-core/graph/tools.ts` to include the mandatory `"type": "function"` structure required by the OpenAI API.
+- **Linter Cleanup**:
+    - Resolved all remaining ESLint errors, including an "impure function" error in the CRM dashboard related to `Date.now()`.

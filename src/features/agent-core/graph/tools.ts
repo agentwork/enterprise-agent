@@ -27,7 +27,7 @@ export async function getMCPToolsForModel(provider: "openai" | "anthropic" = "op
     }));
   }
 
-  // Default: Convert to OpenAI tool format
+  // Default: Return as OpenAI tool format (bindTools handles this for OpenAI)
   return allTools.map((tool) => ({
     type: "function" as const,
     function: {
