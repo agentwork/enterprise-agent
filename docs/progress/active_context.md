@@ -1,9 +1,9 @@
 # Active Context
 
 ## Current Focus
-- **Goal**: Implement Auth System & RBAC.
-- **Status**: Phase 1 - Auth Implementation (Part 1 Completed).
-- **Current Task**: Auth System verified with Unit Tests. Moving to Integration.
+- **Goal**: Implement Agent Core Infrastructure.
+- **Status**: Phase 1 - Auth Completed & Merged. Starting Agent Core.
+- **Current Task**: Setting up LangGraph orchestrator and MCP client factory.
 
 ## Recent Changes
 - **Auth Implementation**:
