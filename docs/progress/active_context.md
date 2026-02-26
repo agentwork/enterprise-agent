@@ -6,6 +6,11 @@
 - **Current Task**: Database Setup & Auth Implementation.
 
 ## Recent Changes
+- **Database Setup**:
+    - Initialized Supabase project locally (`npx supabase init`).
+    - Configured Drizzle (`drizzle.config.ts`, `src/lib/db`).
+    - Implemented Drizzle Schemas: `auth`, `crm`, `knowledge`, `agent`.
+    - Enabled `pgvector` extension and applied migrations (`npx drizzle-kit migrate`).
 - **Project Initialization**:
     - Initialized Next.js 16 (App Router, Tailwind, TypeScript, ESLint).
     - Installed core dependencies: `supabase-js`, `drizzle-orm`, `langchain`, `zod`.
@@ -16,14 +21,10 @@
     - Enforced strict RBAC directory structure (`/admin` vs `/dashboard`).
 
 ## Next Steps (Phase 1 Implementation)
-1.  **Database Setup**:
-    - Initialize Supabase project locally.
-    - Create Drizzle Config & Client (`src/lib/db`).
-    - Apply Schema Migrations (`auth`, `crm`, `knowledge`, `agent`).
-2.  **Auth Implementation**:
+1.  **Auth Implementation**:
     - Configure Supabase Auth.
     - Implement Middleware for RBAC (`/admin` protection).
-3.  **Agent Core Setup**:
+2.  **Agent Core Setup**:
     - Initialize LangGraph runtime in `src/features/agent-core`.
 
 ## Open Questions
