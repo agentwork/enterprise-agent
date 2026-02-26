@@ -8,8 +8,11 @@ export default async function NewProposalPage() {
     getClients(),
   ]);
 
-  const templates = templatesResult.success ? templatesResult.data : [];
-  const clients = clientsResult.success ? clientsResult.data : [];
+  const templates = (templatesResult.success && templatesResult.data) ? templatesResult.data.map(t => ({
+    ...t,
+    structure: t.structure as { id: string; title: string; type: string }[]
+  })) : [];
+  const clients = (clientsResult.success && clientsResult.data) ? clientsResult.data : [];
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
