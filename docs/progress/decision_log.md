@@ -77,3 +77,14 @@
 - **Agent Tooling**:
   - **Search & Ingest**: Created `knowledge_search` and `knowledge_add_document` tools, enabling the agent to both retrieve information and save new knowledge autonomously.
   - **Generative UI Registry**: Mapped knowledge tool outputs to `DocumentPreview` for rich, interactive document results in the chat interface.
+
+## 2026-02-26: Analytics Module & Dashboard Integration
+
+- **Visualization Strategy**:
+  - **Recharts**: Selected `recharts` for its composable, responsive, and React-native architecture.
+  - **Server-Side Aggregation**: Implemented data aggregation (GROUP BY, SUM, COUNT) directly in Drizzle ORM Server Actions to minimize client-side processing.
+
+- **Dashboard Architecture**:
+  - **Hub-and-Spoke Navigation**: Redesigned `/dashboard` as a central navigation hub, providing clear entry points to all modules (Agent, CRM, Knowledge, Analytics).
+  - **Unified Metric Cards**: Standardized the display of key performance indicators (KPIs) across the dashboard.
+

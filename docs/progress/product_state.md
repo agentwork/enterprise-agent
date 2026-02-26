@@ -13,7 +13,7 @@
 | **Feature Documentation** | **Done** | AI/User | Detailed specs for all modules in `docs/features/` + `docs/admin-guideline.md` + `docs/supabase-local.md` |
 | **CRM Module** | **Done (Core + Agent)** | AI | Clients, Deals, Activities CRUD & UI Implemented. Server Actions Tested. Agent Tools Integrated. |
 | **Knowledge Base** | **Done (Core + Agent)** | AI | RAG pipeline with pgvector. Document management UI. Agent tools for search & ingestion. |
-| **Analytics Module** | **Planned** | - | Specs defined |
+| **Analytics Module** | **Done** | AI | Implemented Server Actions for aggregation & Recharts UI. |
 | **Proposal Generator** | **Planned** | - | Specs defined |
 
 ## Known Issues
