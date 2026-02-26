@@ -1,5 +1,20 @@
 # Decision Log
 
+## 2026-02-26: Generative UI & Agent Robustness
+
+- **Currency-Aware Charting**:
+  - Implemented a custom parser in `DataChart` to handle raw database strings, specifically stripping currency symbols ($) and commas (,) to ensure Recharts can plot numeric data accurately.
+  - Added a "Heuristic Trigger" in `registry.tsx` to detect chart-compatible data structures even when the tool name is unknown.
+
+- **Agent Schema Enforcement**:
+  - Injected explicit system instructions into the LangGraph orchestrator to solve the mismatch between AI-generated SQL and the actual Drizzle/Supabase schema (e.g., forcing `expected_close_date` instead of `expectedCloseDate`).
+
+- **Conversational Data Rendering**:
+  - Updated `Chat` UI to detect JSON blocks in the Agent's text response. This allows users to paste data manually or ask the AI to "output JSON" to trigger an immediate chart visualization, bypassing the need for explicit tool execution.
+
+- **Zero-Lint Architecture**:
+  - Refactored `registry.tsx` and `chat.tsx` to eliminate `any` types and unused variables, achieving a clean `pnpm lint` pass and ensuring consistent UI behavior.
+
 ## 2026-02-26: Project Architecture & Database
 
 - **Tech Stack Selection**:

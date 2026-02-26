@@ -16,10 +16,36 @@ export function DataChart({ data, title, xAxisKey, barKey }: DataChartProps) {
 
   // Infer keys if not provided
   const keys = Object.keys(data[0]);
-  const xKey = xAxisKey || keys.find(k => k.toLowerCase().includes("name") || k.toLowerCase().includes("date")) || keys[0];
-  const bKey = barKey || keys.find(k => typeof data[0][k] === "number") || keys[1];
+  const xKey = xAxisKey || keys.find(k => k.toLowerCase().includes("name") || k.toLowerCase().includes("date") || k.toLowerCase().includes("stage")) || keys[0];
+  
+  // Helper to parse potential currency strings or numbers
+  const parseValue = (val: unknown): number | null => {
+    if (typeof val === "number") return val;
+    if (typeof val === "string") {
+      // Remove currency symbols, commas, and whitespace
+      const cleaned = val.replace(/[$,\s]/g, "");
+      const parsed = parseFloat(cleaned);
+      if (!isNaN(parsed) && isFinite(parsed)) return parsed;
+    }
+    return null;
+  };
 
-  if (!bKey) {
+  // Improved bKey detection: check if value is a number OR a parseable string
+  const bKey = barKey || keys.find(k => {
+    const val = data[0][k];
+    return parseValue(val) !== null;
+  }) || keys[1];
+
+  // Prepare data: convert string numbers to actual numbers for Recharts
+  const chartData = data.map(row => {
+    const numericVal = parseValue(row[bKey]);
+    return {
+      ...row,
+      [bKey]: numericVal !== null ? numericVal : 0 // Fallback to 0 if parsing fails for a specific row
+    };
+  });
+
+  if (!bKey || chartData.every(row => (row[bKey] as number) === 0 && parseValue(data[0][bKey]) === null)) {
       return (
           <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -45,11 +71,11 @@ export function DataChart({ data, title, xAxisKey, barKey }: DataChartProps) {
   }
 
   return (
-    <div className="w-full h-64 p-4 border rounded bg-white shadow-sm">
+    <div className="w-full h-64 min-h-[250px] p-4 border rounded bg-white shadow-sm">
       {title && <h3 className="text-sm font-semibold mb-2">{title}</h3>}
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={data}
+          data={chartData}
           margin={{
             top: 5,
             right: 30,

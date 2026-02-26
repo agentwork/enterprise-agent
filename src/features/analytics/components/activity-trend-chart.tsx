@@ -18,7 +18,7 @@ const COLORS: Record<string, string> = {
 
 export function ActivityTrendChart({ data }: ActivityTrendChartProps) {
   const chartData = useMemo(() => {
-    const grouped: Record<string, any> = {};
+    const grouped: Record<string, Record<string, string | number>> = {};
     data.forEach((item) => {
       if (!grouped[item.date]) {
         grouped[item.date] = { date: item.date };
@@ -35,7 +35,7 @@ export function ActivityTrendChart({ data }: ActivityTrendChartProps) {
         if (!item[type]) item[type] = 0;
       });
       return item;
-    }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    }).sort((a, b) => new Date(a.date as string).getTime() - new Date(b.date as string).getTime());
   }, [data]);
 
   const activityTypes = useMemo(() => Array.from(new Set(data.map(d => d.type))), [data]);

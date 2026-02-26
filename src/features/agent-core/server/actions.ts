@@ -33,8 +33,9 @@ export async function invokeAgent(
     return {
       type,
       content: msg.content,
+      name: msg.name,
+      tool_call_id: msg.tool_call_id,
       tool_calls: msg.tool_calls || [],
-      tool_outputs: msg.tool_outputs || [],
     };
   });
 

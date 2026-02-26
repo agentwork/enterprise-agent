@@ -1,10 +1,34 @@
 import { StateGraph } from "@langchain/langgraph";
-import { BaseMessage, AIMessage } from "@langchain/core/messages";
+import { BaseMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import { AgentState } from "./state";
 import { getModel } from "../server/model-factory";
 
 // Tools
 import { getMCPToolsForModel, executeTools } from "./tools";
+
+// System Instructions
+const SYSTEM_INSTRUCTIONS = `You are the Enterprise AI Agent. You help users manage their business operations, including CRM (clients, deals, activities) and knowledge management.
+
+CRITICAL DATABASE SCHEMA RULES:
+When generating SQL queries or calling CRM tools, ALWAYS use the following column names:
+- deals table:
+  - use 'expected_close_date' instead of 'expectedCloseDate'
+  - use 'client_id' instead of 'clientId'
+- clients table:
+  - use 'created_at' and 'updated_at' for timestamps
+- activities table:
+  - use 'client_id' instead of 'clientId'
+  - use 'deal_id' instead of 'dealId'
+  - use 'performed_at' instead of 'performedAt'
+
+Follow standard PostgreSQL syntax. If a query fails, check the column names and try again with the snake_case versions.
+
+GENERATIVE UI CAPABILITIES:
+You have the ability to dynamically generate charts (Bar Charts) and rich UI components. 
+- When you use tools like 'sql_db_query' to fetch data, the system will AUTOMATICALLY render a chart for the user if the data is structured correctly.
+- Do NOT tell the user you cannot generate charts.
+- Do NOT provide large markdown tables if a chart is more appropriate.
+- Simply provide a brief summary of the insights after the tool execution.`;
 
 // 1. Define nodes
 
@@ -12,6 +36,11 @@ import { getMCPToolsForModel, executeTools } from "./tools";
 const agentNode = async (state: AgentState): Promise<Partial<AgentState>> => {
   const { messages } = state;
   
+  // Prepend system instructions if not present
+  const messagesWithSystem = messages.some(m => m instanceof SystemMessage)
+    ? messages
+    : [new SystemMessage(SYSTEM_INSTRUCTIONS), ...messages];
+
   // Get model instance with latest config
   const { model, provider } = await getModel();
 
@@ -38,8 +67,8 @@ const agentNode = async (state: AgentState): Promise<Partial<AgentState>> => {
     throw new Error("Model instance is not a valid LangChain ChatModel (missing bind/bindTools).");
   }
   
-  // Invoke the model
-  const response = await modelWithTools.invoke(messages);
+  // Invoke the model with system instructions
+  const response = await modelWithTools.invoke(messagesWithSystem);
   
   return {
     messages: [response],

@@ -62,7 +62,7 @@ async function seed() {
 
   try {
     console.log("👥 Seeding clients...");
-    const insertedClients = await db.insert(clients).values([
+    const clientData = [
       {
         name: "Acme Corporation",
         industry: "Manufacturing",
@@ -87,93 +87,104 @@ async function seed() {
         website: "https://wayne.com",
         description: "Diversified multinational with interests in tech, shipping, and defense.",
       },
-    ]).returning();
+      {
+        name: "Cyberdyne Systems",
+        industry: "Technology",
+        website: "https://cyberdyne.com",
+        description: "Leading AI and robotics research corporation.",
+      },
+      {
+        name: "Umbrella Corporation",
+        industry: "Pharmaceutical",
+        website: "https://umbrella.com",
+        description: "Global pharmaceutical and biotechnology giant.",
+      },
+      {
+        name: "InGen",
+        industry: "Biotechnology",
+        website: "https://ingen.com",
+        description: "Specializing in genetic engineering and research.",
+      },
+      {
+        name: "Oscorp",
+        industry: "Chemicals",
+        website: "https://oscorp.com",
+        description: "Leading manufacturer of chemicals and medical technology.",
+      },
+      {
+        name: "Tyrell Corporation",
+        industry: "Robotics",
+        website: "https://tyrell.com",
+        description: "Advanced robotics and synthetic human development.",
+      },
+      {
+        name: "Weyland-Yutani",
+        industry: "Aerospace",
+        website: "https://weyland.com",
+        description: "Building better worlds through space exploration and mining.",
+      }
+    ];
 
-    const [acme, globex, stark, wayne] = insertedClients;
+    const insertedClients = await db.insert(clients).values(clientData).returning();
 
     console.log("💼 Seeding deals...");
-    const insertedDeals = await db.insert(deals).values([
-      {
-        clientId: acme.id,
-        title: "Gadget Supply Q3",
-        amount: "50000.00",
-        stage: "qualification",
-        probability: "40",
-        expectedCloseDate: new Date("2026-09-30"),
-      },
-      {
-        clientId: acme.id,
-        title: "Heavy Machinery Expansion",
-        amount: "250000.00",
-        stage: "negotiation",
-        probability: "75",
-        expectedCloseDate: new Date("2026-05-15"),
-      },
-      {
-        clientId: globex.id,
-        title: "Cloud Infrastructure Migration",
-        amount: "120000.00",
-        stage: "proposal",
-        probability: "60",
-        expectedCloseDate: new Date("2026-07-20"),
-      },
-      {
-        clientId: stark.id,
-        title: "Arc Reactor Maintenance Contract",
-        amount: "1000000.00",
-        stage: "closed_won",
-        probability: "100",
-        expectedCloseDate: new Date("2026-03-01"),
-      },
-      {
-        clientId: wayne.id,
-        title: "Urban Development Project",
-        amount: "500000.00",
-        stage: "lead",
-        probability: "10",
-        expectedCloseDate: new Date("2027-01-10"),
-      },
-    ]).returning();
+    const stages = ["lead", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"] as const;
+    const dealData = [];
 
-    const [gadgetDeal, machineDeal, cloudDeal, arcDeal] = insertedDeals;
+    // 為每個客戶生成 3-5 個交易
+    for (const client of insertedClients) {
+      const dealCount = Math.floor(Math.random() * 3) + 3;
+      for (let i = 0; i < dealCount; i++) {
+        const stage = stages[Math.floor(Math.random() * stages.length)];
+        const amount = (Math.random() * 900000 + 100000).toFixed(2);
+        const probability = stage === "closed_won" ? "100" : stage === "closed_lost" ? "0" : (Math.random() * 90).toFixed(0);
+        
+        // 生成過去 6 個月到未來 6 個月的隨機日期
+        const dateOffset = Math.floor(Math.random() * 365) - 180;
+        const expectedCloseDate = new Date();
+        expectedCloseDate.setDate(expectedCloseDate.getDate() + dateOffset);
+
+        dealData.push({
+          clientId: client.id,
+          title: `${client.name} - Project ${String.fromCharCode(65 + i)}`,
+          amount,
+          stage,
+          probability,
+          expectedCloseDate,
+        });
+      }
+    }
+
+    const insertedDeals = await db.insert(deals).values(dealData).returning();
 
     console.log("📝 Seeding activities...");
-    await db.insert(activities).values([
-      {
-        clientId: acme.id,
-        dealId: gadgetDeal.id,
-        type: "call",
-        content: "Discussed Q3 supply requirements. Customer is interested in new gadget line.",
-        sentiment: "positive",
-        performedAt: new Date(),
-      },
-      {
-        clientId: acme.id,
-        dealId: machineDeal.id,
-        type: "meeting",
-        content: "Site visit to Acme HQ. Reviewed space for new machinery.",
-        sentiment: "neutral",
-        performedAt: new Date(Date.now() - 86400000 * 2),
-      },
-      {
-        clientId: globex.id,
-        dealId: cloudDeal.id,
-        type: "email",
-        content: "Sent updated proposal for cloud migration. Waiting for feedback.",
-        sentiment: "neutral",
-        performedAt: new Date(Date.now() - 86400000 * 1),
-      },
-      {
-        clientId: stark.id,
-        dealId: arcDeal.id,
-        type: "note",
-        content: "Contract signed and payment received. Project kick-off scheduled.",
-        sentiment: "positive",
-        performedAt: new Date(),
-      },
-    ]);
+    const activityTypes = ["note", "call", "meeting", "email", "task"] as const;
+    const sentiments = ["positive", "neutral", "negative"];
+    const activityData = [];
 
-    console.log("✅ CRM Seeding completed successfully!");
+    // 為每個交易生成 2-4 個活動
+    for (const deal of insertedDeals) {
+      const activityCount = Math.floor(Math.random() * 3) + 2;
+      for (let i = 0; i < activityCount; i++) {
+        const dateOffset = Math.floor(Math.random() * 30); // 過去 30 天內
+        const performedAt = new Date();
+        performedAt.setDate(performedAt.getDate() - dateOffset);
+
+        activityData.push({
+          clientId: deal.clientId,
+          dealId: deal.id,
+          type: activityTypes[Math.floor(Math.random() * activityTypes.length)],
+          content: `Automated activity update for ${deal.title} - Step ${i + 1}`,
+          sentiment: sentiments[Math.floor(Math.random() * sentiments.length)],
+          performedAt,
+        });
+      }
+    }
+
+    await db.insert(activities).values(activityData);
+
+    console.log(`✅ CRM Seeding completed successfully!`);
+    console.log(`📊 Summary: ${insertedClients.length} Clients, ${insertedDeals.length} Deals, ${activityData.length} Activities`);
   } catch (error) {
     console.error("❌ Seeding failed:", error);
     process.exit(1);

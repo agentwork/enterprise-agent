@@ -14,7 +14,8 @@
 | **CRM Module** | **Done (Core + Agent)** | AI | Clients, Deals, Activities CRUD & UI Implemented. Server Actions Tested. Agent Tools Integrated. |
 | **Knowledge Base** | **Done (Core + Agent)** | AI | RAG pipeline with pgvector. Document management UI. Agent tools for search & ingestion. |
 | **Analytics Module** | **Done** | AI | Implemented Server Actions for aggregation & Recharts UI. |
-| **Proposal Generator** | **Planned** | - | Specs defined |
+| **Generative UI** | **Done** | AI | Auto-detection of data charts in chat and tool outputs. Supports currency parsing. |
+| **Proposal Generator** | **In Progress** | - | Specs defined |
 
 ## Known Issues
 - None (All core runtime bugs resolved)

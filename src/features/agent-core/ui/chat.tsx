@@ -3,11 +3,44 @@
 import { useState } from "react";
 import { invokeAgent } from "../server/actions";
 import { ToolOutput } from "./registry";
+import { DataChart } from "./generative/data-chart";
 
 export function Chat() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [isLoading, setIsLoading] = useState(false);
+
+  // Helper to extract JSON array from markdown content
+  const extractJsonData = (content: string) => {
+    if (typeof content !== "string") return null;
+    
+    // Look for JSON blocks: ```json ... ``` or just ``` ... ```
+    const jsonBlockRegex = /```(?:json)?\s*([\s\S]*?)\s*```/g;
+    let match;
+    while ((match = jsonBlockRegex.exec(content)) !== null) {
+      try {
+        const parsed = JSON.parse(match[1].trim());
+        if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === "object") {
+          return parsed;
+        }
+      } catch {
+        // Not valid JSON, continue searching
+      }
+    }
+    
+    // Fallback: try to parse the whole string if it starts with [
+    const trimmed = content.trim();
+    if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch {
+        // Not valid JSON
+      }
+    }
+    
+    return null;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,6 +117,16 @@ export function Chat() {
                         {isUser ? "You" : "Agent"}
                     </div>
                     <div className="whitespace-pre-wrap">{msg.content}</div>
+                    
+                    {/* Automatically render chart if message contains valid JSON data but isn't a tool message */}
+                    {!isUser && !isTool && extractJsonData(msg.content) && (
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                            <DataChart 
+                                data={extractJsonData(msg.content)!} 
+                                title="AI Generated Visualization" 
+                            />
+                        </div>
+                    )}
                     
                     {/* Render Tool Calls if any */}
                     {msg.tool_calls && msg.tool_calls.length > 0 && (
