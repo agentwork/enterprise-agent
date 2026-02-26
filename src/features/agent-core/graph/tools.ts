@@ -2,6 +2,7 @@ import { MCPClientFactory } from "../server/mcp-factory";
 import { ToolMessage } from "@langchain/core/messages";
 import { AIMessage } from "@langchain/core/messages";
 import { crmTools } from "../../crm/server/tools";
+import { knowledgeTools } from "../../knowledge/server/tools";
 
 /**
  * Fetches tools from MCP and converts them to the specified provider's format.
@@ -11,11 +12,12 @@ export async function getMCPToolsForModel(provider: "openai" | "anthropic" = "op
   // Ensure we have the latest tools
   const mcpTools = await mcp.listTools();
   
-  // Combine MCP tools with local CRM tools
+  // Combine MCP tools with local CRM tools and Knowledge tools
   // We map crmTools to match the Tool type interface if needed, but for now they are compatible enough
   const allTools = [
     ...mcpTools,
-    ...crmTools
+    ...crmTools,
+    ...knowledgeTools
   ];
   
   if (provider === "anthropic") {
@@ -53,13 +55,19 @@ export async function executeTools(lastMessage: AIMessage) {
   for (const call of toolCalls) {
     try {
       // Check if it's a local CRM tool
-      const localTool = crmTools.find(t => t.name === call.name);
+      const crmTool = crmTools.find(t => t.name === call.name);
+      // Check if it's a local Knowledge tool
+      const knowledgeTool = knowledgeTools.find(t => t.name === call.name);
       
       let result;
-      if (localTool) {
-        // Execute local tool handler
-        console.log(`[Agent] Executing local tool: ${call.name}`);
-        result = await localTool.handler(call.args);
+      if (crmTool) {
+        // Execute local CRM tool handler
+        console.log(`[Agent] Executing local CRM tool: ${call.name}`);
+        result = await crmTool.handler(call.args);
+      } else if (knowledgeTool) {
+        // Execute local Knowledge tool handler
+        console.log(`[Agent] Executing local Knowledge tool: ${call.name}`);
+        result = await knowledgeTool.handler(call.args);
       } else {
         // Execute via MCP
         // call.args is typically an object if parsed correctly by LangChain

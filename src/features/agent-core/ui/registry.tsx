@@ -15,6 +15,7 @@ const registry: Record<string, ToolComponent> = {
   // Register default handlers for common tool types
   "sql_db_query": (props) => <DataChart data={Array.isArray(props.data) ? props.data : (props.data as { rows: unknown[] })?.rows || []} />,
   "vector_search": (props) => <DocumentPreview documents={Array.isArray(props.data) ? props.data : (props.data as { documents: unknown[] })?.documents || []} />,
+  "knowledge_search": (props) => <DocumentPreview documents={Array.isArray(props.data) ? props.data : (props.data as { documents: unknown[] })?.documents || []} />,
   // Add more mappings as needed based on actual tool names
 };
 
