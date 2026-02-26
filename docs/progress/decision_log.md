@@ -17,3 +17,13 @@
 - **Directory Structure**:
   - Strict separation of `/admin` (System controls) and `/dashboard` (User tools) to enforce RBAC.
   - Feature-Base layout (`src/features/*`) to allow independent development of business modules.
+
+## 2026-02-26: Auth System Implementation (Phase 1)
+
+- **Auth Strategy**:
+  - **Supabase Auth**: Utilizing Supabase SSR package for secure server-side session management.
+  - **Middleware Protection**: Implemented `src/middleware.ts` to protect routes and handle session refreshing.
+  - **RBAC Enforcement**: Middleware checks for `/admin` access by querying user profile roles (future optimization: custom claims).
+  - **Server Actions**: Encapsulated Login/Logout logic in Server Actions (`src/features/auth/server/actions.ts`) for type safety and progressive enhancement.
+  - **Validation**: Using `zod` for strict runtime validation of auth inputs.
+  - **Testing**: Added Jest unit tests for Server Actions to ensure logic correctness before UI integration.
